@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +14,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('posts.home');
 });
+Route::get('/about', function () {
+    return view('posts.about');
+});
+
+Route::get('/articles','ArticleController@index')->name('articles.index');
+Route::get('/articles/create','ArticleController@create')->name('articles.create');
+Route::get('/articles/{article}','ArticleController@show')->name('articles.show');
+
+
+Route::post('/articles','ArticleController@store')->name('articles.store');
+
+Route::get('/articles/{article}/edit','ArticleController@edit')->name('articles.edit')->middleware('can:update,article');
+Route::put('/articles/{article}','ArticleController@update')->name('articles.update')->middleware('can:update,article');
+
+Route::delete('/articles/{article}','ArticleController@destroy')->name('articles.delete')->middleware('can:delete,article');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
