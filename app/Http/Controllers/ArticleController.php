@@ -25,10 +25,10 @@ class ArticleController extends Controller
     public function index()
     {
         if(request('tag')){
-            $article = Tag::findOrFail(request('tag'))->articles;
+            $article = Tag::findOrFail(request('tag'))->articles()->with(['author','tags'])->paginate();
         }
         else {
-            $article = Article::latest()->get();
+            $article = Article::with(['author','tags'])->latest()->paginate(5);
         }
         return view('posts.articles.index', ['articles'=>$article]);
     }

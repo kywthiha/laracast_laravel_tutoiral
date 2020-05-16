@@ -10,8 +10,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    @yield('link')
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Fonts -->
@@ -22,6 +22,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @yield('link')
 </head>
 <body>
     <div id="app">
@@ -41,7 +42,7 @@
                                 <a href="/" accesskey="1" title="" class="nav-link {{ Request::path() == '/'? 'active':'' }}">Homepage</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" accesskey="2" title="" class="nav-link">Our Clients</a>
+                                <a href="/users" class="nav-link {{ Request::is('users*') ? 'active':'' }}" accesskey="2" title="" class="nav-link">Users</a>
                             </li>
                             <li class="nav-item">
                                 <a href="/about" accesskey="3" title="" class="nav-link {{ Request::path() == 'about'? 'active':'' }}">About Us</a>
@@ -50,7 +51,7 @@
                                 <a href="/articles" accesskey="4" title="" class="nav-link {{ Request::is('articles*') ? 'active':'' }}">Articles</a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" accesskey="5" title="" class="nav-link {{ Request::path() == 'f'? 'active':'' }}">Contact Us</a>
+                                <a href="/roles" accesskey="5" title="" class="nav-link {{ Request::is('roles*') ? 'active':'' }}">Roles</a>
                             </li>
                     </ul>
 
@@ -97,5 +98,7 @@
         </main>
     </div>
 @yield('script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

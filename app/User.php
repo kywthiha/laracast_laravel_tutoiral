@@ -44,4 +44,8 @@ class User extends Authenticatable
     public function tags(){
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
 }
