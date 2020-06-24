@@ -1,10 +1,4 @@
-@extends('posts.layouts.app')
-@section('link')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css" rel="stylesheet"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
-@endsection
-@section('content')
+<x-master>
     <div id="wrapper">
         <div id="page" class="container">
             <div class="row justify-content-center">
@@ -57,14 +51,5 @@
             </div>
         </div>
     </div>
-@endsection
-@section('script')
-    <script type="text/javascript">
-        $(document).ready(function(){
-            new SlimSelect({
-                select: '#tags',
-                placeholder: 'Select Tags'
-            })
-        });
-    </script>
-@endsection
+</x-master>
+

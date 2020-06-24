@@ -14,49 +14,38 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('posts.home');
+    return view('home');
 });
 Route::get('/about', function () {
     return view('posts.about');
 });
 
-Route::get('/articles','ArticleController@index')->name('articles.index');
-Route::get('/articles/create','ArticleController@create')->name('articles.create');
-Route::get('/articles/{article}','ArticleController@show')->name('articles.show');
-
-
-Route::post('/articles','ArticleController@store')->name('articles.store');
-
-Route::get('/articles/{article}/edit','ArticleController@edit')->name('articles.edit')->middleware('can:update,article');
-Route::put('/articles/{article}','ArticleController@update')->name('articles.update')->middleware('can:update,article');
-
-Route::delete('/articles/{article}','ArticleController@destroy')->name('articles.delete')->middleware('can:delete,article');
-
+Route::resource('/articles','ArticleController');
 Route::get('/users','UserController@index')->name('users.index');
-Route::get('/users/user','ArticleController@create')->name('users.create');
-Route::get('/users/{user}','ArticleController@show')->name('users.show');
+Route::get('/users/user','UserController@create')->name('users.create');
+Route::get('/users/{user}','UserController@show')->name('users.show');
 
 
-Route::post('/users','ArticleController@store')->name('users.store');
+Route::post('/users','UserController@store')->name('users.store');
 
-Route::get('/users/{user}/edit','ArticleController@edit')->name('users.edit')->middleware('can:update,user');
-Route::put('/users/{user}','ArticleController@update')->name('users.update')->middleware('can:update,user');
+Route::get('/users/{user}/assign_role','UserController@editAssignRole')->name('users.assign_role');
+Route::put('/users/assign/{user}','UserController@updateAssignRole')->name('users.update_assign_role');
 
-Route::delete('/users/{user}','ArticleController@destroy')->name('users.delete')->middleware('can:delete,user');
-
-
-Route::get('/roles','RoleController@index')->name('roles.index');
-Route::get('/roles/create','RoleController@create')->name('roles.create');
-Route::get('/roles/{role}','RoleController@show')->name('roles.show');
+Route::delete('/users/{user}','UserController@destroy')->name('users.delete');
 
 
-Route::post('/roles','RoleController@store')->name('roles.store');
-
-Route::get('/roles/{role}/edit','RoleController@edit')->name('roles.edit');
-Route::put('/roles/{role}','RoleController@update')->name('roles.update');
-
-Route::delete('/roles/{role}','RoleController@destroy')->name('roles.delete');
+Route::resource('/roles','RoleController');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get('/hello/{locale?}',function ($locale ='en'){
+    App::setLocale($locale);
+   return view('welcome') ;
+});
+
+Route::get('/admin',function (){
+    return view('admin.index');
+});

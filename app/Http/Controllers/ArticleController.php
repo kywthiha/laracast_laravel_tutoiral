@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Http\Requests\ArticleRequest;
+use App\Repositories\ArticleRepository;
+use App\Services\ArticleService;
 use App\Tag;
+use App\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,9 +16,21 @@ use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
-    public function __construct()
+    /**
+     * @var ArticleService
+     */
+    private $articleService;
+    /**
+     * @var ArticleRepository
+     */
+    private $articleRepository;
+
+    public function __construct(ArticleService $articleService,ArticleRepository $articleRepository)
     {
         $this->middleware('auth');
+        $this->authorizeResource(Article::class, 'article');
+        $this->articleService = $articleService;
+        $this->articleRepository = $articleRepository;
     }
 
     /**
@@ -25,13 +41,17 @@ class ArticleController extends Controller
     public function index()
     {
         if(request('tag')){
-            $article = Tag::findOrFail(request('tag'))->articles()->with(['author','tags'])->paginate();
+            $article = $this->articleRepository->findByTagId(request('tag'))->paginate(5);
+        }
+        elseif(request('user')){
+            $article = $this->articleRepository->findByUserId(request('user'))->paginate(5);
         }
         else {
-            $article = Article::with(['author','tags'])->latest()->paginate(5);
+            $article = $this->articleRepository->all()->paginate(5);
         }
         return view('posts.articles.index', ['articles'=>$article]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -49,17 +69,14 @@ class ArticleController extends Controller
      * @param Request $request
      * @return RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        $this->validateArticle($request);
         $article = new Article();
-        $article->user_id = Auth::id();
         $article->title = $request->title;
         $article->body = $request->body;
+        $article->tags = $request->tags;
         $article->except = $request->except;
-        $article->save();
-        $article->tags()->attach($request->tags);
-
+        $article = $this->articleService->create($article,Auth::id());
         return redirect($article->path());
     }
 
@@ -93,15 +110,13 @@ class ArticleController extends Controller
      * @return RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $this->validateArticle($request);
         $article->title = $request->title;
         $article->body = $request->body;
         $article->except = $request->except;
-        $article->save();
-        $article->tags()->sync($request->tags);
-
+        $article->tags = $request->tags;
+        $article = $this->articleService->update($article,Auth::id());
         return redirect($article->path());
     }
 
@@ -114,16 +129,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        $article->delete();
+        $this->articleService->delete($article->id);
         return back();
     }
 
-    protected function validateArticle(Request $request){
-        return   $request->validate([
-            'title'=>'required',
-            'body'=>'required',
-            'except'=>'required',
-            'tags'=>'exists:tags,id'
-        ]);
-    }
+
 }

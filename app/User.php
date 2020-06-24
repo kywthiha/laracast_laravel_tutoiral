@@ -5,8 +5,10 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Ramsey\Collection\Collection;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -37,6 +39,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
     public function articles(){
         return $this->hasMany(Article::class);
     }
@@ -46,6 +49,27 @@ class User extends Authenticatable
     }
 
     public function roles(){
-        return $this->belongsToMany(Role::class)->withTimestamps();
+        return $this->belongsToMany(Role::class)->withTimestamps()->with(['abilities']);
     }
+
+    public function assigned_user(){
+        return $this->belongsTo(User::class,'user_id','id','users');
+    }
+
+    public function getAbilities(){
+        return $this->roles->pluck('abilities.*.name')->unique()->flatten();
+    }
+
+    public function checkAbilities(array $data){
+        return $this->getAbilities()->contains(function ($value,$key) use ($data) {
+            return in_array($value,$data?$data:[]);
+        });
+    }
+
+    public function checkAbility(string $data)
+    {
+        return $this->getAbilities()->contains($data);
+    }
+
+
 }

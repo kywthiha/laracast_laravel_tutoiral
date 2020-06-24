@@ -1,62 +1,79 @@
-@extends('posts.layouts.app')
-@section('link')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
-@endsection
-@section('content')
-    <div id="wrapper">
-        <div id="page" class="container">
-            <h1 class="h1">New Article</h1>
-            <form action="/articles/{{$article->id}}" method="POST">
-                @method('PUT')
-                @csrf
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{  $article->title }}">
-                    @error('title')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="tags">Tags</label>
-                    <select multiple id="tags" class="@error('tags') is-invalid @enderror" name="tags[]">
+<x-master>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card text-center">
+                    <div class="card-header">{{ __('Edit Assign Role') }}</div>
 
-                        @foreach($tags as $tag)
-                            <option
-                                    value="{{ $tag->id }}" {{ $article->tags->contains($tag)?'selected':'' }}>{{ $tag->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('tags')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-
+                    <div class="card-body align-content-center">
+                        <h1 class="h3">{{ $user->name }}</h1>
+                        <h5 class="h5 text-primary">{{ $user->email }}</h5>
+                        <form method="POST" action="{{ route('users.update_assign_role',$user) }}">
+                            @csrf
+                            @method('PUT')
+                            <h5 class="h5" style="margin-top: 30px;">Role</h5>
+                            <table class="table">
+                                <tbody>
+                                @foreach($roles as $role)
+                                    <tr>
+                                        <td>
+                                            <div class="">
+                                                <input type="checkbox" name="roles[]" id="{{$role->id}}" {{ $user->roles->contains($role)?'checked':'' }} value="{{$role->id}}">
+                                                <label for="{{$role->id}}" class="{{ $user->roles->contains($role)?'badge badge-secondary':'' }}"
+                                                       style="margin-left: 10px;">{{$role->name}}</label>
+                                            </div>
+                                            <div class="modal fade" id="{{$role->name}}_{{$role->id}}" tabindex="-1"
+                                                 role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="exampleModalLongTitle">{{$role->name}}
+                                                                ( {{$role->id}} )</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @foreach($role->abilities as $ability)
+                                                                <div class="badge badge-pill badge-secondary">
+                                                                    {{ $ability->name }}
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Close
+                                                            </button>
+                                                            <a href="{{route('roles.edit',$role)}}" type="button"
+                                                               class="btn btn-primary">Edit Ability</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#{{$role->name}}_{{$role->id}}">Detail
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Save') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="body">Body</label>
-                    <textarea class="form-control @error('body') is-invalid @enderror" name="body" id="body" rows="3">{{ $article->body }}</textarea>
-                    @error('body')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="except">Except</label>
-                    <textarea class="form-control @error('except') is-invalid @enderror" name="except" id="except" rows="3">{{ $article->except }}</textarea>
-                    @error('except')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
-@endsection
-@section('script')
-    <script type="text/javascript">
-        $(document).ready(function(){
-            new SlimSelect({
-                select: '#tags',
-                placeholder: 'Select Tags'
-            })
-        });
-    </script>
-@endsection
+</x-master>
+
+

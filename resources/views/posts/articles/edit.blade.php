@@ -1,9 +1,4 @@
-@extends('posts.layouts.app')
-@section('link')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.26.0/slimselect.min.js"></script>
-@endsection
-@section('content')
+<x-master>
     <div id="wrapper">
         <div id="page" class="container">
             <h1 class="h1">New Article</h1>
@@ -23,7 +18,7 @@
 
                         @foreach($tags as $tag)
                             <option
-                                    value="{{ $tag->id }}" {{ $article->tags->contains($tag)?'selected':'' }}>{{ $tag->name }}</option>
+                                value="{{ $tag->id }}" {{ $article->tags->contains($tag)?'selected':'' }}>{{ $tag->name }}</option>
                         @endforeach
                     </select>
                     @error('tags')
@@ -49,14 +44,5 @@
             </form>
         </div>
     </div>
-@endsection
-@section('script')
-    <script type="text/javascript">
-        $(document).ready(function(){
-            new SlimSelect({
-                select: '#tags',
-                placeholder: 'Select Tags'
-            })
-        });
-    </script>
-@endsection
+</x-master>
+

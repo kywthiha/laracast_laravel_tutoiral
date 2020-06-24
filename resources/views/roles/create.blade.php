@@ -1,11 +1,7 @@
-@extends('posts.layouts.app')
-@section('link')
-
-@endsection
-@section('content')
+<x-master>
     <div id="wrapper">
         <div id="page" class="container">
-            <h4 class="h4">Edit Role</h4>
+            <h4 class="h4">New Role</h4>
             <form action="{{route('roles.store')}}" method="POST">
                 @csrf
                 <div class="form-group">
@@ -45,11 +41,4 @@
             </form>
         </div>
     </div>
-@endsection
-@section('script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-        });
-    </script>
-@endsection
+</x-master>

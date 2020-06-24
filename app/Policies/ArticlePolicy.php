@@ -11,72 +11,98 @@ class ArticlePolicy
     use HandlesAuthorization;
 
     public function before(User $user){
-        if($user->id === 9)
-            return true;
+
     }
 
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @return mixed
      */
     public function viewAny(User $user)
     {
-        //
+        $data = ['all_edit_articles','all_delete_articles','all_read_articles','own_edit_articles','own_delete_articles','own_read_articles','publish_articles'];
+        if($user->checkAbilities($data))
+            return true;
+        else{
+            return false;
+        }
     }
 
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @param  \App\Article  $article
      * @return mixed
      */
     public function view(User $user, Article $article)
     {
-        //
+        if($user->checkAbilities(['all_edit_articles','all_delete_articles','all_read_articles']))
+            return true;
+        elseif($user->checkAbilities(['own_edit_articles','own_delete_articles','own_read_articles']) && $article->author->is($user)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @return mixed
      */
     public function create(User $user)
     {
-        //
+        if($user->checkAbility('publish_articles')){
+         return true;
+        }else{
+            return false;
+        }
     }
 
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @param  \App\Article  $article
      * @return mixed
      */
     public function update(User $user, Article $article)
     {
-        return $article->author->is($user);
+        if($user->checkAbility('all_edit_articles'))
+            return true;
+        elseif($user->checkAbility('own_edit_articles') && $article->author->is($user)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @param  \App\Article  $article
      * @return mixed
      */
     public function delete(User $user, Article $article)
     {
-        return $article->author->is($user);
+        if($user->checkAbility('all_delete_articles'))
+            return true;
+        elseif($user->checkAbility('own_delete_articles') && $article->author->is($user)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @param  \App\Article  $article
      * @return mixed
      */
@@ -88,7 +114,7 @@ class ArticlePolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \App\User  $user
+     * @param User $user
      * @param  \App\Article  $article
      * @return mixed
      */

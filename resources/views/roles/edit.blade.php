@@ -1,8 +1,4 @@
-@extends('posts.layouts.app')
-@section('link')
-
-@endsection
-@section('content')
+<x-master>
     <div id="wrapper">
         <div id="page" class="container">
             <h4 class="h4">Edit Role</h4>
@@ -21,9 +17,9 @@
                 <div class="form-group">
                     <div class="row is-invalid">
                         @foreach($abilities as $ability)
-                            <div class="form-check" style="margin-top: 10px;margin-left: 20px;">
+                            <div class="form-check " style="margin-top: 10px;margin-left: 20px;">
                                 <input class="form-check-input" name="abilities[]" id="{{ $ability->id }}" value="{{ $ability->id }}" type="checkbox" {{ $role->abilities->contains($ability)?'checked':'' }}>
-                                <label class="form-check-label" for="{{ $ability->id }}">
+                                <label class="form-check-label {{ $role->abilities->contains($ability)?'badge badge-secondary':'' }}" for="{{ $ability->id }}">
                                     {{ $ability->name }}
                                 </label>
                             </div>
@@ -46,11 +42,4 @@
             </form>
         </div>
     </div>
-@endsection
-@section('script')
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-        });
-    </script>
-@endsection
+</x-master>
