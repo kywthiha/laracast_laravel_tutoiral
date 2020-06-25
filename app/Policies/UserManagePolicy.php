@@ -9,6 +9,7 @@ class UserManagePolicy
 {
     use HandlesAuthorization;
 
+
     /**
      * Determine whether the user can view any models.
      *
@@ -17,7 +18,6 @@ class UserManagePolicy
      */
     public function viewAny(User $user)
     {
-        dd($user);
         if($user->checkAbilities(['manage_users','read_only_users']))
             return true;
         else
@@ -70,7 +70,6 @@ class UserManagePolicy
      */
     public function update(User $user, User $model)
     {
-        dd($model);
         if($user->checkAbilities(['manage_users']))
             return true;
         else

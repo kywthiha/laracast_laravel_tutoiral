@@ -22,17 +22,16 @@ Route::get('/', function () {
 Route::get('/articles/search','ArticleController@search')->name('articles.search');
 
 Route::resource('/articles','ArticleController');
-Route::get('/users','UserController@index')->name('users.index');
-Route::get('/users/user','UserController@create')->name('users.create');
-Route::get('/users/{user}','UserController@show')->name('users.show');
 
-
-Route::post('/users','UserController@store')->name('users.store');
-
-Route::get('/users/{user}/assign_role','UserController@editAssignRole')->name('users.assign_role');
-Route::put('/users/assign/{user}','UserController@updateAssignRole')->name('users.update_assign_role');
-
-Route::delete('/users/{user}','UserController@destroy')->name('users.delete');
+Route::prefix('/users')->middleware('auth')->group(function(){
+    Route::get('/','UserController@index')->name('users.index');
+    Route::get('/user','UserController@create')->name('users.create');
+    Route::get('/{user}','UserController@show')->name('users.show')->middleware('can:view,user');
+    Route::post('/users','UserController@store')->name('users.store');
+    Route::get('/{user}/assign_role','UserController@editAssignRole')->name('users.assign_role')->middleware('can:update,user');
+    Route::put('/assign/{user}','UserController@updateAssignRole')->name('users.update_assign_role')->middleware('can:update,user');
+    Route::delete('/{user}','UserController@destroy')->name('users.delete');
+});
 
 
 Route::resource('/roles','RoleController');
@@ -42,11 +41,3 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/hello/{locale?}',function ($locale ='en'){
-    App::setLocale($locale);
-   return view('welcome') ;
-});
-
-Route::get('/admin',function (){
-    return view('admin.index');
-});

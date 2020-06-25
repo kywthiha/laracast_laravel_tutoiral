@@ -42,13 +42,13 @@ class ArticleController extends Controller
     {
         $paginate = 5;
         if(request('tag')){
-            $articles = $this->articleRepository->findByTagId(request('tag'))->paginate($paginate);
+            $articles = $this->articleRepository->findByTagId(request('tag'),$paginate);
         }
         elseif(request('user')){
-            $articles = $this->articleRepository->findByUserId(request('user'))->paginate($paginate);
+            $articles = $this->articleRepository->findByUserId(request('user'),$paginate);
         }
         else {
-            $articles = $this->articleRepository->all()->paginate($paginate);
+            $articles = $this->articleRepository->all($paginate);
         }
         return view('articles.index', compact('articles'));
     }
@@ -81,7 +81,7 @@ class ArticleController extends Controller
      */
     public function store(ArticleRequest $request)
     {
-        $article = $this->articleService->create($request,Auth::id());
+        $article = $this->articleService->create($request);
         return redirect(route('articles.show',compact('article')));
     }
 
@@ -117,7 +117,7 @@ class ArticleController extends Controller
      */
     public function update(ArticleRequest $request, Article $article)
     {
-        $article = $this->articleService->update($request,$article,Auth::id());
+        $article = $this->articleService->update($request,$article);
         return redirect(route('articles.show',compact('article')));
     }
 
