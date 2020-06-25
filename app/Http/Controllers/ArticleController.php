@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Http\Requests\ArticleRequest;
 use App\Repositories\ArticleRepository;
+use App\Repositories\TagRepository;
 use App\Services\ArticleService;
-use App\Tag;
-use App\User;
+use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -40,16 +40,24 @@ class ArticleController extends Controller
      */
     public function index()
     {
+        $paginate = 5;
         if(request('tag')){
-            $article = $this->articleRepository->findByTagId(request('tag'))->paginate(5);
+            $articles = $this->articleRepository->findByTagId(request('tag'))->paginate($paginate);
         }
         elseif(request('user')){
-            $article = $this->articleRepository->findByUserId(request('user'))->paginate(5);
+            $articles = $this->articleRepository->findByUserId(request('user'))->paginate($paginate);
         }
         else {
-            $article = $this->articleRepository->all()->paginate(5);
+            $articles = $this->articleRepository->all()->paginate($paginate);
         }
-        return view('posts.articles.index', ['articles'=>$article]);
+        return view('articles.index', compact('articles'));
+    }
+
+
+    public function search(){
+        $articles = $this->articleRepository->search(request()->query('query'))->paginate(5);
+        $articles->load('tags','author');
+        return view('articles.index',compact('articles'));
     }
 
 
@@ -60,77 +68,70 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('posts.articles.create',['tags'=>Tag::all()]);
+        $article = new Article();
+        $tags = (new TagRepository())->all();
+        return view('articles.create',compact('tags','article'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return RedirectResponse|\Illuminate\Routing\Redirector
+     * @param ArticleRequest $request
+     * @return RedirectResponse|Redirector
      */
     public function store(ArticleRequest $request)
     {
-        $article = new Article();
-        $article->title = $request->title;
-        $article->body = $request->body;
-        $article->tags = $request->tags;
-        $article->except = $request->except;
-        $article = $this->articleService->create($article,Auth::id());
-        return redirect($article->path());
+        $article = $this->articleService->create($request,Auth::id());
+        return redirect(route('articles.show',compact('article')));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Article  $article
+     * @param Article $article
      * @return Factory|View
      */
     public function show(Article $article)
     {
-        return view('posts.articles.show', ['article'=>$article]);
+        return view('articles.show', compact('article'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Article $article
+     * @param Article $article
      * @return Factory|View
      */
     public function edit(Article $article)
     {
-        return view('posts.articles.edit',['article'=>$article,'tags'=>Tag::all()]);
+        $tags = (new TagRepository())->all();
+        return view('articles.edit',compact('article','tags'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param \App\Article $article
-     * @return RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param ArticleRequest $request
+     * @param Article $article
+     * @return RedirectResponse|Redirector
      */
     public function update(ArticleRequest $request, Article $article)
     {
-        $article->title = $request->title;
-        $article->body = $request->body;
-        $article->except = $request->except;
-        $article->tags = $request->tags;
-        $article = $this->articleService->update($article,Auth::id());
-        return redirect($article->path());
+        $article = $this->articleService->update($request,$article,Auth::id());
+        return redirect(route('articles.show',compact('article')));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Article $article
+     * @param Article $article
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Article $article)
     {
-        $this->articleService->delete($article->id);
-        return back();
+        $this->articleService->delete($article);
+        return redirect(route('articles.index'));
     }
 
 

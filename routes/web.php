@@ -1,4 +1,6 @@
 <?php
+
+use App\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,9 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
-Route::get('/about', function () {
-    return view('posts.about');
-});
+
+Route::get('/articles/search','ArticleController@search')->name('articles.search');
 
 Route::resource('/articles','ArticleController');
 Route::get('/users','UserController@index')->name('users.index');
