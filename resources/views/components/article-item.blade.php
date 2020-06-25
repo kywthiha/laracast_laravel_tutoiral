@@ -1,4 +1,4 @@
-<div class="card" style="margin-bottom: 10px;">
+<div {{ $attributes->merge(['class' => 'card','style'=>"margin-bottom: 10px;"]) }}>
     <div class="card-body">
         <div class="card-title">
             <h3><a href="/articles/{{ $article->id }}">{{ ucwords($article->title) }}</a></h3>
@@ -11,23 +11,14 @@
         </div>
         <div class="card-text">
             <p class="text-black-50"> {{ $article->except }}</p>
-
         </div>
-        <div class="row">
-            @can('update',$article)
-                <form class="card-link" action="{{ route("articles.edit",$article) }}">
-                    <button class="btn-xs btn-primary">Edit</button>
-                </form>
-            @endcan
 
-            @can('delete',$article)
-                <form class="card-link" action="{{ route("articles.destroy",$article) }}"
-                      onSubmit="return confirm('Are you sure?')" method="POST">
-                    @method('DELETE')
-                    @csrf
-                    <button class="btn-xs btn-danger">Delete</button>
-                </form>
-            @endcan
+        <div class="row">
+
+            <x-article-edit-button class="card-link" :article="$article" />
+
+            <x-article-delete-button class="card-link" :article="$article"/>
+
         </div>
     </div>
     <div class="card-footer">

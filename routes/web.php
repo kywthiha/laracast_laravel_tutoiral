@@ -1,4 +1,6 @@
 <?php
+
+use App\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,8 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
-Route::get('/about', function () {
-    return view('posts.about');
+
+Route::get('search', function() {
+    $query = ''; // <-- Change the query for testing.
+
+    $articles = Article::search($query)->get();
+
+    return $articles;
 });
 
 Route::resource('/articles','ArticleController');

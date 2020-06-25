@@ -44,7 +44,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = $this->roleRepository->withAll();
-        return view('roles.index',['roles'=>$roles]);
+        return view('roles.index',compact('roles'));
     }
 
     /**
@@ -55,7 +55,7 @@ class RoleController extends Controller
     public function create()
     {
         $abilities = $this->roleRepository->allAbility();
-        return view('roles.create',['abilities'=>$abilities]);
+        return view('roles.create',compact('abilities'));
     }
 
     /**

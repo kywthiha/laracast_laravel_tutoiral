@@ -3,12 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Article extends Model
 {
-    public function path(){
-        return route('articles.show',$this);
-    }
+    protected $fillable = ['title','body','except','user_id'];
+
 
     public function author(){
         return $this->belongsTo(User::class,'user_id');

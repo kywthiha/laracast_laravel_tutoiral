@@ -5,36 +5,36 @@ namespace App\Services;
 
 
 use App\Article;
+use App\Http\Requests\ArticleRequest;
 
 class ArticleService
 {
-    public function create(Article $data,int $user_id)
+    public function create(ArticleRequest $request,int $user_id):Article
     {
-        $article = new Article();
-        $article->user_id = $user_id;
-        $article->title = $data->title;
-        $article->body = $data->body;
-        $article->except = $data->except;
-        $article->save();
-        $article->tags()->attach($data->tags);
+        $article = Article::create([
+            'user_id'=>$user_id,
+            'title'=>$request->title,
+            'body'=>$request->body,
+            'except'=>$request->except
+        ]);
+        $article->tags()->attach($request->tags);
         return $article;
     }
 
-    public function update(Article $data,int $user_id)
+    public function update(ArticleRequest $request,Article $article,int $user_Id):Article
     {
-        $article = Article::find($data->id);
-        $article->user_id = $user_id;
-        $article->title = $data->title;
-        $article->body = $data->body;
-        $article->except = $data->except;
-        $article->save();
-        $article->tags()->sync($data->tags);
+        $article->update([
+            'user_Id'=>$user_Id,
+            'title'=>$request->title,
+            'body'=>$request->body,
+            'except'=>$request->except
+        ]);
+        $article->tags()->sync($request->tags);
         return $article;
     }
 
-    public function delete(int $id)
+    public function delete(Article $article):Article
     {
-        $article = Article::find($id);
         $article->delete();
         return $article;
     }
