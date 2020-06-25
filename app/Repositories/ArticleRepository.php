@@ -17,6 +17,11 @@ class ArticleRepository
         return Article::with(['author', 'tags'])->latest();
     }
 
+    public function search(string $query=null)
+    {
+        return Article::search($query);
+    }
+
     public function findByUserId(int $id):BelongsToMany
     {
         return User::findOrFail($id)->articles()->with(['author', 'tags'])->latest();

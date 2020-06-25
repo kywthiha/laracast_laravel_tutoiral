@@ -19,13 +19,7 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('search', function() {
-    $query = ''; // <-- Change the query for testing.
-
-    $articles = Article::search($query)->get();
-
-    return $articles;
-});
+Route::get('/articles/search','ArticleController@search')->name('articles.search');
 
 Route::resource('/articles','ArticleController');
 Route::get('/users','UserController@index')->name('users.index');

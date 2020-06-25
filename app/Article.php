@@ -7,6 +7,7 @@ use Laravel\Scout\Searchable;
 
 class Article extends Model
 {
+    use Searchable;
     protected $fillable = ['title','body','except','user_id'];
 
 
@@ -20,6 +21,18 @@ class Article extends Model
 
     public function tagsname(){
         return $this->tags->pluck('name')->unique();
+    }
+
+    public function toSearchableArray()
+    {
+        $this->author;
+        $this->tags;
+        $array = $this->toArray();
+
+        $array = $this->transform($array);
+
+
+        return $array;
     }
 
 }

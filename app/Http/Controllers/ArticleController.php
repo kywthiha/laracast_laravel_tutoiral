@@ -54,6 +54,13 @@ class ArticleController extends Controller
     }
 
 
+    public function search(){
+        $articles = $this->articleRepository->search(request()->query('query'))->paginate(5);
+        $articles->load('tags','author');
+        return view('articles.index',compact('articles'));
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
