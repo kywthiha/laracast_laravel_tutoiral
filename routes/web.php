@@ -34,7 +34,7 @@ Route::prefix('/users')->middleware('auth')->group(function(){
 });
 
 
-Route::resource('/roles','RoleController');
+Route::resource('/roles','RoleController')->middleware('auth');
 
 Auth::routes();
 
