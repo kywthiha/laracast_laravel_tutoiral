@@ -18,9 +18,11 @@ class ArticleRepository
         return Article::with(['author', 'tags'])->latest()->paginate($paginate);
     }
 
-    public function search(string $query=null)
+    public function search(string $query=null,int $paginate)
     {
-        return Article::search($query);
+        $articles = Article::search($query)->paginate($paginate);
+        $articles->load('tags','author');
+        return $articles;
     }
 
     public function findByUserId(int $id,int $paginate)

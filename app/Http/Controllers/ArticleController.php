@@ -25,6 +25,8 @@ class ArticleController extends Controller
      */
     private $articleRepository;
 
+    private $paginate = 5;
+
     public function __construct(ArticleService $articleService,ArticleRepository $articleRepository)
     {
         $this->middleware('auth');
@@ -40,23 +42,22 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $paginate = 5;
+
         if(request('tag')){
-            $articles = $this->articleRepository->findByTagId(request('tag'),$paginate);
+            $articles = $this->articleRepository->findByTagId(request('tag'),$this->paginate);
         }
         elseif(request('user')){
-            $articles = $this->articleRepository->findByUserId(request('user'),$paginate);
+            $articles = $this->articleRepository->findByUserId(request('user'),$this->paginate);
         }
         else {
-            $articles = $this->articleRepository->all($paginate);
+            $articles = $this->articleRepository->all($this->paginate);
         }
         return view('articles.index', compact('articles'));
     }
 
 
     public function search(){
-        $articles = $this->articleRepository->search(request()->query('query'))->paginate(5);
-        $articles->load('tags','author');
+        $articles = $this->articleRepository->search(request('query'),$this->paginate);
         return view('articles.index',compact('articles'));
     }
 

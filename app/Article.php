@@ -23,6 +23,12 @@ class Article extends Model
         return $this->tags->pluck('name')->unique();
     }
 
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        return array('title' => $array['title'],'body' => $array['body']);
+    }
+
 
 
 }
