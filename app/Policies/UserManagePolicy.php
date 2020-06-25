@@ -17,10 +17,11 @@ class UserManagePolicy
      */
     public function viewAny(User $user)
     {
+        dd($user);
         if($user->checkAbilities(['manage_users','read_only_users']))
             return true;
         else
-            return false;
+            return true;
     }
 
     /**
@@ -69,6 +70,7 @@ class UserManagePolicy
      */
     public function update(User $user, User $model)
     {
+        dd($model);
         if($user->checkAbilities(['manage_users']))
             return true;
         else
