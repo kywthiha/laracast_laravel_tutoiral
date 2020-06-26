@@ -34,6 +34,7 @@ class RolePolicy
      */
     public function view(User $user, Role $role)
     {
+
         if($user->checkAbilities(['manage_roles','read_only_roles']))
             return true;
         else{
