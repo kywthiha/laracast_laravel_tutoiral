@@ -43,4 +43,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/{article}/comments','CommentController@index');
+
 
