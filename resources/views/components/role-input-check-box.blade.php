@@ -6,9 +6,9 @@
                 <div class="form-check">
                     <div style="padding: 5px;">
                         <input class="form-check-input" name="{{$name}}[]" id="{{ $item->id }}" value="{{ $item->id }}"
-                               type="checkbox" {{ $exitItems->contains($item->id)?'checked':'' }}>
+                               type="checkbox" {{ $exitItems?$exitItems->contains($item->id)?'checked':'':'' }}>
                         <label
-                            class="form-check-label {{ $exitItems->contains($item->id)?'badge badge-secondary':'' }}"
+                            class="form-check-label {{ $exitItems?$exitItems->contains($item->id)?'badge badge-secondary':'':'' }}"
                             for="{{ $item->id }}">
                             {{ $item->name }}
                         </label>

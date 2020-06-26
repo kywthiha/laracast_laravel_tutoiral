@@ -16,7 +16,7 @@ class RoleInputCheckBox extends Component
      *
      * @return void
      */
-    public function __construct($label,$name,$items,$exitItems)
+    public function __construct($label,$name,$items,$exitItems=null)
     {
 
         $this->label = $label;

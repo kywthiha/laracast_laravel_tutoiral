@@ -30,7 +30,7 @@ class RoleController extends Controller
 
     public function __construct(RoleService $roleService, RoleRepository $roleRepository)
     {
-        $this->authorizeResource(Role::class, 'role');
+//        $this->authorizeResource(Role::class, 'role');
         $this->roleService = $roleService;
         $this->roleRepository = $roleRepository;
     }
