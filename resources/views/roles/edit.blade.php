@@ -5,8 +5,7 @@
             <form action="{{route('roles.update',$role)}}" method="POST">
                 @method('PUT')
                 @csrf
-                <x-article-input-text label="Role Name" name="name" :description="$role->name"/>
-                <x-article-input-textarea label="Description" name="description" :description="$role->description"/>
+                <x-role-manage-form :role="$role" :abilities="$abilities"/>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
