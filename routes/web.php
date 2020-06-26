@@ -28,8 +28,8 @@ Route::prefix('/users')->middleware('auth')->group(function(){
     Route::get('/user','UserController@create')->name('users.create');
     Route::get('/{user}','UserController@show')->name('users.show')->middleware('can:view,user');
     Route::post('/users','UserController@store')->name('users.store');
-    Route::get('/{user}/assign_role','UserController@editAssignRole')->name('users.assign_role')->middleware('can:update,user');
-    Route::put('/assign/{user}','UserController@updateAssignRole')->name('users.update_assign_role')->middleware('can:update,user');
+    Route::get('/{user}/assign_role','UserController@editAssignRole')->name('users.assign_role')->middleware('can:assignRole,user');
+    Route::put('/assign/{user}','UserController@updateAssignRole')->name('users.update_assign_role')->middleware('can:assignRole,user');
     Route::delete('/{user}','UserController@destroy')->name('users.delete');
 });
 

@@ -56,9 +56,7 @@
                             </div>
                             <div class="row justify-content-between">
                                 <div class="col-3">
-                                    <a href="{{route('users.assign_role',$user)}}" class="btn btn-primary">
-                                        {{ __('Assign Role') }}
-                                    </a>
+
                                 </div>
                             </div>
 
