@@ -55,11 +55,6 @@
                                 </div>
                             </div>
                             <div class="row justify-content-between">
-                                <div class="col-2">
-                                    <a href="{{ route('users.index')  }}" type="submit" class="btn btn-dark">
-                                        {{ __('Back') }}
-                                    </a>
-                                </div>
                                 <div class="col-3">
                                     <a href="{{route('users.assign_role',$user)}}" class="btn btn-primary">
                                         {{ __('Assign Role') }}

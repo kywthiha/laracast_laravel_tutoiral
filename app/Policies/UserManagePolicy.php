@@ -21,7 +21,7 @@ class UserManagePolicy
         if($user->checkAbilities(['manage_users','read_only_users']))
             return true;
         else
-            return true;
+            return false;
     }
 
     /**
@@ -35,13 +35,13 @@ class UserManagePolicy
     {
         if($user->checkAbilities(['manage_users']))
             return true;
-        elseif ($model->assigned_user->is($user))
+        elseif ($model->is($user))
             return true;
         else return false;
     }
 
     public function changePassword(User $user, User $model){
-        if ($model->assigned_user->is($user))
+        if ($model->is($user))
             return true;
         else
             return false;

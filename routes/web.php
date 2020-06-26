@@ -24,7 +24,7 @@ Route::get('/articles/search','ArticleController@search')->name('articles.search
 Route::resource('/articles','ArticleController');
 
 Route::prefix('/users')->middleware('auth')->group(function(){
-    Route::get('/','UserController@index')->name('users.index');
+    Route::get('/','UserController@index')->name('users.index')->middleware('can:viewAny,App\User');
     Route::get('/user','UserController@create')->name('users.create');
     Route::get('/{user}','UserController@show')->name('users.show')->middleware('can:view,user');
     Route::post('/users','UserController@store')->name('users.store');
