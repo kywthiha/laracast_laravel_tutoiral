@@ -56,7 +56,7 @@
                             </div>
                             <div class="row justify-content-between">
                                 <div class="col-3">
-
+                                    <x-assign-role-button :user="$user"/>
                                 </div>
                             </div>
 

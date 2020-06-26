@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
-    public function assignRole(User $user,int $assign_user_id,array $roles=null)
+    public function assignRole(User $user,array $roles=null)
     {
-        $user->user_id = $assign_user_id;
+        $user->user_id = Auth::id();
         $user->save();
         $user->roles()->sync($roles);
         return $user;
