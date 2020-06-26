@@ -32,8 +32,9 @@ Route::prefix('/users')->middleware('auth')->group(function(){
 });
 
 Route::prefix('/user')->middleware('auth')->group(function(){
-    Route::get('/edit-password','UserController@editPassword')->name('users.edit_password');
-    Route::put('/change-password','UserController@changePassword')->name('users.change_password');
+    Route::get('/{user}/profile','UserController@profile')->name('user.profile')->middleware('can:changePassword,user');
+    Route::get('/edit-password','UserController@editPassword')->name('user.edit_password');
+    Route::put('/change-password','UserController@changePassword')->name('user.change_password');
 });
 
 Route::resource('/roles','RoleController')->middleware('auth');

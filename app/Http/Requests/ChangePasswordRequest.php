@@ -30,15 +30,15 @@ class ChangePasswordRequest extends FormRequest
         ];
     }
 
-//    public function withValidator($validator)
-//    {
-//        // checks user current password
-//        // before making changes
-//        $validator->after(function ($validator) {
-//            if ( !Hash::check($this->current_password, $this->user()->password) ) {
-//                $validator->errors()->add('current_password', 'Your current password is incorrect.');
-//            }
-//        });
-//        return;
-//    }
+    public function withValidator($validator)
+    {
+        // checks user current password
+        // before making changes
+        $validator->after(function ($validator) {
+            if ( !Hash::check($this->current_password, $this->user()->password) ) {
+                $validator->errors()->add('current_password', 'Your current password is incorrect.');
+            }
+        });
+        return;
+    }
 }

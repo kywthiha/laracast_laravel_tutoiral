@@ -101,23 +101,21 @@ class UserController extends Controller
         return redirect(route('users.index'));
     }
 
-    public function profile()
+    public function profile(User $user)
     {
-        $user = Auth::user();
-        return view('user.profile',['user'=>$user]);
+        return view('user.profile',compact('user'));
     }
 
     public function editPassword(){
-        return view('users.edit_password');
+        return view('user.edit_password');
     }
 
     public function changePassword(ChangePasswordRequest $request){
-
         $request->user()->update([
-            'password' => Hash::make($request['new-password']),
+            'password' => Hash::make($request->password),
         ]);
-
-        return 'false';
+        Auth::logout();
+        return redirect('/login');
     }
 
     /**
