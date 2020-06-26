@@ -4,34 +4,36 @@
 namespace App\Services;
 
 
+use App\Http\Requests\RoleRequest;
 use App\Role;
+use Illuminate\Support\Facades\Auth;
 
 class RoleService
 {
-    public function create(Role $data,int $user_id)
+    public function create(RoleRequest $request)
     {
-        $role= new Role();
-        $role->name = $data->name;
-        $role->description = $data->description;
-        $role->user_id = $user_id;
-        $role->save();
-        $role->abilities()->sync($data->abilities);
+        $role= Role::create([
+            'name'=> $request->name,
+            'user_id'=> Auth::id(),
+            'description'=>$request->description,
+        ]);
+        $role->abilities()->sync($request->abilities);
         return $role;
     }
 
-    public function update(Role $data,int $user_id)
+    public function update(RoleRequest $request,Role $role)
     {
-        $role = Role::find($data->id);
-        $role->name = $data->name;
-        $role->description = $data->description;
-        $role->save();
-        $role->abilities()->sync($data->abilities);
+        $role->update([
+            'name'=> $request->name,
+            'user_id'=> Auth::id(),
+            'description'=>$request->description,
+        ]);
+        $role->abilities()->sync($request->abilities);
         return $role;
     }
 
-    public function delete(int $id)
+    public function delete(Role $role)
     {
-        $role = Role::find($id);
         $role->delete();
         return $role;
     }

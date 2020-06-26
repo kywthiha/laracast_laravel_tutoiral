@@ -8,27 +8,30 @@ use App\Article;
 use App\Tag;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ArticleRepository
 {
-    public function all():Builder
+    public function all(int $paginate)
     {
-        return Article::with(['author', 'tags'])->latest();
+        return Article::with(['author', 'tags'])->latest()->paginate($paginate);
     }
 
-    public function search(string $query=null)
+    public function search(string $query=null,int $paginate)
     {
-        return Article::search($query);
+        $articles = Article::search($query)->paginate($paginate);
+        $articles->load('tags','author');
+        return $articles;
     }
 
-    public function findByUserId(int $id):BelongsToMany
+    public function findByUserId(int $id,int $paginate)
     {
-        return User::findOrFail($id)->articles()->with(['author', 'tags'])->latest();
+        return User::findOrFail($id)->articles()->with(['author', 'tags'])->latest()->paginate($paginate);
     }
 
-    public function findByTagId(int $tag):BelongsToMany
+    public function findByTagId(int $tag,int $paginate)
     {
-        return Tag::findOrFail($tag)->articles()->with(['author', 'tags'])->latest();
+        return Tag::findOrFail($tag)->articles()->with(['author', 'tags'])->latest()->paginate($paginate);
     }
 }

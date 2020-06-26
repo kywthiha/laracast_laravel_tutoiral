@@ -25,14 +25,10 @@ class Article extends Model
 
     public function toSearchableArray()
     {
-        $this->author;
-        $this->tags;
         $array = $this->toArray();
-
-        $array = $this->transform($array);
-
-
-        return $array;
+        return array('title' => $array['title'],'body' => $array['body']);
     }
+
+
 
 }

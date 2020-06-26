@@ -30,7 +30,6 @@ class RoleController extends Controller
 
     public function __construct(RoleService $roleService, RoleRepository $roleRepository)
     {
-        $this->middleware('auth');
         $this->authorizeResource(Role::class, 'role');
         $this->roleService = $roleService;
         $this->roleRepository = $roleRepository;
@@ -66,11 +65,7 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $role= new Role();
-        $role->name = $request->name;
-        $role->description = $request->description;
-        $role->abilities = $request->abilities;
-        $this->roleService->create($role,Auth::id());
+        $this->roleService->create($request);
         return redirect(route('roles.index'));
     }
 
@@ -93,7 +88,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('roles.edit',['role'=>$role,'abilities'=>$this->roleRepository->allAbility()]);
+        $abilities = $this->roleRepository->allAbility();
+        return view('roles.edit',compact('role','abilities'));
     }
 
     /**
@@ -105,11 +101,8 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $role->name = $request->name;
-        $role->description = $request->description;
-        $role->abilities = $request->abilities;
-        $role = $this->roleService->update($role,Auth::id());
-        return redirect(route('roles.index'));
+        $role = $this->roleService->update($request,$role);
+        return redirect(route('roles.show',compact('role')));
     }
 
     /**
@@ -121,7 +114,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        $this->roleService->delete($role->id);
+        $this->roleService->delete($role);
         return redirect(route('roles.index'));
     }
 
