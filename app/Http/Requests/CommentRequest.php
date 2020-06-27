@@ -25,9 +25,9 @@ class CommentRequest extends FormRequest
     {
         return [
             'text'=>'required',
-            'user_id'=>'required|exists:user,id',
-            'article_id'=>'required|exists:user,id',
-            'comment_id'=>'exits:comment,id'
+            'user_id'=>'required|exists:users,id',
+            'article_id'=>'required|exists:articles,id',
+            'comment_id'=>'exists:comments,id'
         ];
     }
 }

@@ -1,19 +1,18 @@
 <?php
 
-
 namespace App\Repositories;
 
 
 use App\Article;
-use App\Tag;
-use App\User;
+use Illuminate\Database\Eloquent\Collection;
 
 
 class CommentRepository
 {
-    public function findByArticle(Article $article)
+    public function findByArticle(Article $article): Collection
     {
-        return $article->comments;
+        $comments = $article->comments()->whereNull('comment_id')->with('comments')->latest();
+        return $comments->get();
     }
 
 }
