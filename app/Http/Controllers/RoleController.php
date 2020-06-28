@@ -54,7 +54,8 @@ class RoleController extends Controller
     public function create()
     {
         $abilities = $this->roleRepository->allAbility();
-        return view('roles.create',compact('abilities'));
+        $role = new Role();
+        return view('roles.create',compact('abilities','role'));
     }
 
     /**

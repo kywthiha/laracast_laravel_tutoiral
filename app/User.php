@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Ramsey\Collection\Collection;
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -44,6 +43,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Article::class);
     }
 
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
     public function tags(){
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
@@ -57,10 +60,10 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function getAbilities(){
-        return $this->roles->pluck('abilities.*.name')->unique()->flatten();
+        return $this->roles->pluck('abilities.*.name')->flatten()->unique();
     }
 
-    public function checkAbilities(array $data){
+    public function checkAbilities(array $data = []){
         return $this->getAbilities()->contains(function ($value,$key) use ($data) {
             return in_array($value,$data?$data:[]);
         });

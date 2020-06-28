@@ -11,10 +11,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($roles as $role)
-            <x-role :role="$role"></x-role>
-        @endforeach
-
+        @each('components.role',$roles,'role')
         </tbody>
     </table>
 </div>

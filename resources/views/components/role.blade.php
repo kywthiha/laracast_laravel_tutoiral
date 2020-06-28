@@ -11,20 +11,11 @@
             </div>
         </td>
         <td>{{ $role->created_users?$role->created_users->name:'System Admin' }}</td>
-
-        @can('update',$role)
-            <td>
-                <div class="row justify-content-center">
-                    <a href="{{ route('roles.edit',$role) }}" class="btn btn-primary"
-                       style="margin-right: 10px;">Edit</a>
-                    <form action="{{ route('roles.destroy',$role) }}"
-                          onSubmit="return confirm('Are you sure?')" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </div>
-            </td>
-        @endcan
+        <td>
+            <div class="row justify-content-between" style="padding-left: 10px;padding-right: 10px;">
+                <x-role-edit-button :role="$role"/>
+                <x-role-delete-button :role="$role"/>
+            </div>
+        </td>
     </tr>
 </div>

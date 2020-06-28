@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\UserRoleRequest;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
@@ -12,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -95,8 +97,25 @@ class UserController extends Controller
      */
     public function updateAssignRole(UserRoleRequest $request, User $user)
     {
-        $this->userService->assignRole($user,Auth::id(),$request->roles);
+        $this->userService->assignRole($user,$request->roles);
         return redirect(route('users.index'));
+    }
+
+    public function profile(User $user)
+    {
+        return view('user.profile',compact('user'));
+    }
+
+    public function editPassword(){
+        return view('user.edit_password');
+    }
+
+    public function changePassword(ChangePasswordRequest $request){
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+        Auth::logout();
+        return redirect('/login');
     }
 
     /**

@@ -22,6 +22,7 @@
                     <x-article-delete-button class="card-link" :article="$article"/>
 
                 </div>
+                <x-article-input-textarea label="Comment" name="comment"/>
             </div>
             <div class="card-footer">
                 <span>Posted by <span class="text-primary">{{ $article->author->name }}</span></span>
