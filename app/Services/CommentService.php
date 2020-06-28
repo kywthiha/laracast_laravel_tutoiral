@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentService
 {
-    public function create(CommentRequest $request):Comment
+    public function create(CommentRequest $request,Article $article):Comment
     {
         /** @var Comment $comment */
         $comment = Comment::create([
             'user_id'=>Auth::id(),
             'text'=>$request->text,
-            'article_id'=>$request->article_id,
+            'article_id'=>$article->id,
             'comment_id'=>$request->comment_id
         ]);
 
@@ -36,7 +36,11 @@ class CommentService
 
     public function delete(Comment $comment):bool
     {
-        $comment->delete();
+        try {
+            $comment->delete();
+        } catch (Exception $e) {
+        } catch (\Exception $e) {
+        }
         return true;
     }
 }
