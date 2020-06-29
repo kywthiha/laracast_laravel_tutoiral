@@ -53,7 +53,11 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        //
+        if($comment->user->is($user)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
@@ -66,9 +70,10 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        if($user->checkAbility('all_delete_articles'))
+        if($comment->article->author->is($user)){
             return true;
-        elseif($user->checkAbility('own_delete_articles') && $comment->user->is($user)){
+        }
+        elseif($comment->user->is($user)){
             return true;
         }else{
             return false;

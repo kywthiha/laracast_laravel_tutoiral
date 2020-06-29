@@ -13,20 +13,20 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentService
 {
-    public function create(CommentRequest $request,Article $article):Comment
+    public function create(CommentRequest $request,Article $article,Comment $comment):Comment
     {
         /** @var Comment $comment */
         $comment = Comment::create([
             'user_id'=>Auth::id(),
             'text'=>$request->text,
             'article_id'=>$article->id,
-            'comment_id'=>$request->comment_id
+            'comment_id'=>$comment->id,
         ]);
 
         return $comment;
     }
 
-    public function update(CommentUpdateRequest $request,Comment $comment):Comment
+    public function update(CommentRequest $request,Comment $comment):Comment
     {
         $comment->update([
             'text'=>$request->text

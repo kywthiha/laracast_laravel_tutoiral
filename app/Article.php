@@ -11,6 +11,8 @@ class Article extends Model
     protected $fillable = ['title','body','except','user_id'];
 
 
+
+
     public function author(){
         return $this->belongsTo(User::class,'user_id');
     }

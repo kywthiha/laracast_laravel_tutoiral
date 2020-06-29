@@ -32,17 +32,19 @@ class CommentController extends Controller
         return $this->commentRepository->findByArticle($article);
     }
 
-    public function store(CommentRequest $request,Article $article){
-        return $this->commentService->create($request,$article);
+    public function store(CommentRequest $request,Article $article,Comment $comment){
+        return $this->commentService->create($request,$article,$comment);
     }
 
     public function update(CommentRequest $request,Article $article,Comment $comment){
         $comment = $this->commentService->update($request,$comment);
+        $comment->status = 1;
         return $comment;
     }
     public function destroy(Article $article,Comment $comment){
         $this->commentService->delete($comment);
-        return true;
+        $comment->status = 1;
+        return $comment;
     }
 
 }

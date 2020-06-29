@@ -59,6 +59,12 @@
                             METHOD: 'GET',
                         }
                     },
+                    REPLY(id) {
+                        return {
+                            URL: `${this.ROOT_URL}/${id}`,
+                            METHOD: 'POST'
+                        };
+                    },
                     UPDATE(id) {
                         return {
                             URL: `${this.ROOT_URL}/${id}`,
@@ -88,10 +94,24 @@
                             }
                         }
                     });
+                    const ReplyCommentComponent = $(`<div></div>`)
+
+                    if(comments){
+                        comments.forEach((comment, index) => {
+                            console.log(comment);
+                            ReplyCommentComponent.append(CommentComponent({
+                                id: comment.id,
+                                user_name: comment.user.name,
+                                comment: comment.text,
+                                created_at: comment.created_at,
+                                comments: comment.comments
+                            }));
+                        })
+                    }
 
                     const UserProfile = $("<img/>", {
                         "class": "d-flex mr-3 rounded-circle",
-                        "src": "http://placehold.it/50x50",
+                        "src": `https://i.pravatar.cc/50?u=${user_name}`,
                         "alt": ""
                     })
                     const CommentBody = $("<div></div>", {
@@ -99,7 +119,6 @@
                     })
                     const CommentAction = $("<div></div>");
 
-                    @can('delete',$article)
                     const DeleteButton = $("<a></a>",
                         {
                             text:"Delete",
@@ -113,10 +132,15 @@
                                     })
                                         .then(response => response.json())
                                         .then(data => {
-                                            console.log('Success:', data);
-                                            fetch(API.LIST().URL).then(response => response.json()).then(data => {
-                                                comments_render(data);
-                                            })
+                                            if(data.status === 1){
+                                                console.log('Success:', data);
+                                                fetch(API.LIST().URL).then(response => response.json()).then(data => {
+                                                    comments_render(data);
+                                                })
+                                            }
+                                            else{
+                                                alert("You don't delete");
+                                            }
                                         })
                                         .catch((error) => {
                                             console.error('Error:', error);
@@ -128,8 +152,72 @@
                         }
                         )
 
+                    const ReplyButton = $("<a></a>",{
+                        text:"Reply",
+                        style: "margin-left:12px",
+                        href:"",
+                        on:{
+                            click:function (e) {
+                                e.preventDefault();
+                                const reply = prompt("Reply comment");
+                                const formData = new URLSearchParams();
+                                formData.append('text', reply);
+                                fetch(API.REPLY(id).URL, {
+                                    method: API.REPLY(id).METHOD,
+                                    headers: API.HEADERS,
+                                    body: formData,
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+
+                                        fetch(API.LIST().URL).then(response => response.json()).then(data => {
+                                            comments_render(data);
+                                        })
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error:', error);
+                                    });
+                            }
+                        }
+                    })
+
+                    const EditButton = $("<a></a>",{
+                        text:"Edit",
+                        style: "margin-left:12px",
+                        href:"",
+                        on:{
+                            click:function (e) {
+                                e.preventDefault();
+                                const text = prompt("Edit comment",comment);
+                                const formData = new URLSearchParams();
+                                formData.append('text', text);
+                                fetch(API.UPDATE(id).URL, {
+                                    method: API.UPDATE(id).METHOD,
+                                    headers: API.HEADERS,
+                                    body: formData,
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if(data.status === 1){
+                                            console.log('Success:', data);
+                                            fetch(API.LIST().URL).then(response => response.json()).then(data => {
+                                                comments_render(data);
+                                            })
+                                        }
+                                        else{
+                                            alert("You don't edit");
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error:', error);
+                                    });
+                            }
+                        }
+                    })
+
                     CommentAction.append(DeleteButton);
-                        @endcan
+                    CommentAction.append(ReplyButton);
+                    CommentAction.append(EditButton);
 
                     const CommentHeader = ({user_name, created_at}) => (`
                     <h5 class="mt-0">${user_name} <span style="font-size: 0.7rem;color:blue;"> ${new Date(created_at).toDateString()}</span></h5>
@@ -141,8 +229,10 @@
 
                     CommentBody.append(comment)
                     CommentBody.append(CommentAction)
+                    CommentBody.append(ReplyCommentComponent)
                     CommentDiv.append(UserProfile)
                     CommentDiv.append(CommentBody)
+
 
                         return CommentDiv;
 
@@ -152,7 +242,6 @@
                 const comments_render = (data) => {
                     $('#comments').children().remove();
                     data.forEach((comment, index) => {
-                        console.log()
                         $('#comments').append(CommentComponent({
                             id: comment.id,
                             user_name: comment.user.name,
@@ -160,21 +249,9 @@
                             created_at: comment.created_at,
                             comments: comment.comments
                         }));
-
-                        $('.action_button').append();
-                        if (comment.comments) {
-                            comment.comments.forEach((comment, index) => {
-                                $(`#reply_comments_${comment.comment_id}`).append(CommentComponent({
-                                    id: comment.id,
-                                    user_name: comment.user.name,
-                                    comment: comment.text,
-                                    created_at: comment.created_at,
-                                    comments: comment.comments
-                                }));
-                            })
-                        }
                     })
                 }
+
                 fetch(API.LIST().URL).then(response => response.json()).then(data => {
                     comments_render(data);
                 })
