@@ -17,14 +17,11 @@
                 {{ $user->assigned_user->name }}
             @endisset
         </td>
-        <td>
-            <a href="{{ route('users.assign_role',$user) }}" class="btn btn-sm btn-primary" style="width: 88px;">Assign Role</a>
-        </td>
-        <td>
-            <form action="" method="POST" onSubmit="return confirm('Are you ok')">
-                @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-            </form>
+        <td style="width: 200px;">
+            <div class="row justify-content-between" style="padding: 10px;">
+                <x-assign-role-button :user="$user"/>
+                <x-user-delete-button :user="$user"/>
+            </div>
         </td>
     </tr>
 </div>

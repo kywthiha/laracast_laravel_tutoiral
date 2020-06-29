@@ -14,32 +14,7 @@ class AbilitySeeder extends Seeder
         DB::table('abilities')->insert(
             [
                 [
-                    'name' => 'all_edit_articles',
-                    'created_at' => NOW(),
-                    'updated_at' => NOW()
-                ],
-                [
-                    'name' => 'all_delete_articles',
-                    'created_at' => NOW(),
-                    'updated_at' => NOW()
-                ],
-                [
-                    'name' => 'own_edit_articles',
-                    'created_at' => NOW(),
-                    'updated_at' => NOW()
-                ],
-                [
-                    'name' => 'own_delete_articles',
-                    'created_at' => NOW(),
-                    'updated_at' => NOW()
-                ],
-                [
-                    'name' => 'all_read_articles',
-                    'created_at' => NOW(),
-                    'updated_at' => NOW()
-                ],
-                [
-                    'name' => 'own_read_articles',
+                    'name' => 'manage_articles',
                     'created_at' => NOW(),
                     'updated_at' => NOW()
                 ],

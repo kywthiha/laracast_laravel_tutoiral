@@ -10,6 +10,12 @@ class RolePolicy
 {
     use HandlesAuthorization;
 
+
+    public function before(User $user){
+        if($user->getAbilities()->contains('manage_roles'))
+            return true;
+    }
+
     /**
      * Determine whether the user can view any models.
      *
@@ -18,7 +24,7 @@ class RolePolicy
      */
     public function viewAny(User $user)
     {
-        if($user->checkAbilities(['manage_roles','read_only_roles']))
+        if($user->getAbilities()->contains('read_only_roles'))
             return true;
         else{
             return false;
@@ -35,7 +41,7 @@ class RolePolicy
     public function view(User $user, Role $role)
     {
 
-        if($user->checkAbilities(['manage_roles','read_only_roles']))
+        if($user->getAbilities()->contains('read_only_roles'))
             return true;
         else{
             return false;
@@ -50,11 +56,7 @@ class RolePolicy
      */
     public function create(User $user)
     {
-        if($user->checkAbility('manage_roles'))
-            return true;
-        else{
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -66,11 +68,7 @@ class RolePolicy
      */
     public function update(User $user, Role $role)
     {
-        if($user->checkAbility('manage_roles'))
-            return true;
-        else{
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -82,11 +80,7 @@ class RolePolicy
      */
     public function delete(User $user, Role $role)
     {
-        if($user->checkAbility('manage_roles'))
-            return true;
-        else{
-            return false;
-        }
+        return false;
     }
 
     /**

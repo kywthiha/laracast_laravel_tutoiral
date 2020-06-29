@@ -10,7 +10,7 @@
                     <th>Role</th>
                     <th>Register at</th>
                     <th>Assigned by</th>
-                    <th colspan="2">Action</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>

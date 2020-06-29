@@ -79,7 +79,7 @@ class UserManagePolicy
 
     public function assignRole(User $user, User $model)
     {
-        if ($user->checkAbilities(['manage_users']))
+        if ($user->getAbilities()->contains('manage_users'))
             return true;
         else return false;
     }
