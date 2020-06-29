@@ -43,6 +43,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/{article}/comments','CommentController@index');
 
-
+Route::get('/article/{article}/comments','CommentController@index')->middleware('auth','can:viewAny,App\Article');
+Route::post('/article/{article}/comments','CommentController@store')->middleware('auth','can:create,App\Article');
+Route::put('/article/{article}/comments/{comment}','CommentController@update')->middleware('auth','can:update,article');
+Route::delete('/article/{article}/comments/{comment}','CommentController@destroy')->middleware('auth','can:delete,comment');

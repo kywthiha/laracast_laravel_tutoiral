@@ -29,8 +29,8 @@ class ArticleController extends Controller
 
     public function __construct(ArticleService $articleService,ArticleRepository $articleRepository)
     {
-        $this->middleware('auth');
-        $this->authorizeResource(Article::class, 'article');
+//        $this->middleware('auth');
+//        $this->authorizeResource(Article::class, 'article');
         $this->articleService = $articleService;
         $this->articleRepository = $articleRepository;
     }

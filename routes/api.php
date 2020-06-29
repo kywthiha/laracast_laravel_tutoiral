@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/article/comments/{article}','CommentController@store');
+Route::put('/article/comments/{comment}','CommentController@update');
+Route::delete('/article/comments/{comment}','CommentController@destroy');

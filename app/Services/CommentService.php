@@ -8,38 +8,39 @@ use App\Article;
 use App\Comment;
 use App\Http\Requests\ArticleRequest;
 use App\Http\Requests\CommentRequest;
+use App\Http\Requests\CommentUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 
 class CommentService
 {
-    public function create(CommentRequest $request):Comment
+    public function create(CommentRequest $request,Article $article):Comment
     {
         /** @var Comment $comment */
         $comment = Comment::create([
             'user_id'=>Auth::id(),
             'text'=>$request->text,
-            'article_id'=>$request->article_id,
+            'article_id'=>$article->id,
             'comment_id'=>$request->comment_id
         ]);
 
         return $comment;
     }
 
-    public function update(ArticleRequest $request,Article $article):Article
+    public function update(CommentUpdateRequest $request,Comment $comment):Comment
     {
-        $article->update([
-            'user_Id'=>Auth::id(),
-            'title'=>$request->title,
-            'body'=>$request->body,
-            'except'=>$request->except
+        $comment->update([
+            'text'=>$request->text
         ]);
-        $article->tags()->sync($request->tags);
-        return $article;
+        return $comment;
     }
 
-    public function delete(Article $article):Article
+    public function delete(Comment $comment):bool
     {
-        $article->delete();
-        return $article;
+        try {
+            $comment->delete();
+        } catch (Exception $e) {
+        } catch (\Exception $e) {
+        }
+        return true;
     }
 }
