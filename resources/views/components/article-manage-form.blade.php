@@ -4,4 +4,5 @@
     <x-article-input-textarea label="Body" name="body" :description="$article->body"/>
     <x-article-input-textarea label="Except" name="except" :description="$article->except"/>
 
+
 </div>

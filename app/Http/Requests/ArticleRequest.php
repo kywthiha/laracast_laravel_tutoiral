@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleRequest extends FormRequest
 {
@@ -24,10 +25,29 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'=>'required',
-            'body'=>'required',
-            'except'=>'required',
-            'tags'=>'exists:tags,id'
+            'title' => 'required',
+            'body' => 'required',
+            'except' => 'required',
+            'tags' => 'exists:tags,id',
+            'image' => 'string'
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            "image.string" => "Please Upload Image"
+        ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->image) {
+                if (!Storage::exists($this->image)) {
+                    $validator->errors()->add('image', 'Please Upload Image');
+                }
+            }
+        });
     }
 }

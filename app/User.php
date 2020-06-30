@@ -64,14 +64,19 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function checkAbilities(array $data = []){
-        return $this->getAbilities()->contains(function ($value,$key) use ($data) {
-            return in_array($value,$data?$data:[]);
+        return $this->getAbilities()->contains(function ($value, $key) use ($data) {
+            return in_array($value, $data ? $data : []);
         });
     }
 
     public function checkAbility(string $data)
     {
         return $this->getAbilities()->contains($data);
+    }
+
+    public function image()
+    {
+        return $this->morphOne('App\Image', 'imageable');
     }
 
 
