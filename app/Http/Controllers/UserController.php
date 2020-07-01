@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\ProfileImageUploadRequest;
 use App\Http\Requests\UserRoleRequest;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
@@ -42,6 +43,12 @@ class UserController extends Controller
     {
         $users = $this->userRepository->all();
         return view('users.index',compact('users'));
+    }
+
+    public function storeProfileImage(ProfileImageUploadRequest $request){
+        $image = $this->userService->storeProfile($request);
+        $image->status = 1;
+        return $image;
     }
 
     /**

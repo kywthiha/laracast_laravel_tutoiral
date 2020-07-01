@@ -34,6 +34,7 @@ Route::prefix('/user')->middleware('auth')->group(function(){
     Route::get('/{user}/profile','UserController@profile')->name('user.profile')->middleware('can:changePassword,user');
     Route::get('/edit-password','UserController@editPassword')->name('user.edit_password');
     Route::put('/change-password', 'UserController@changePassword')->name('user.change_password');
+    Route::patch('/upload-profile','UserController@storeProfileImage')->name('user.upload_profile');
 });
 
 Route::resource('/roles', 'RoleController')->middleware('auth');
@@ -48,4 +49,4 @@ Route::post('/article/{article}/comments/{comment?}', 'CommentController@store')
 Route::put('/article/{article}/comments/{comment}', 'CommentController@update')->middleware('auth', 'can:update,comment');
 Route::delete('/article/{article}/comments/{comment}', 'CommentController@destroy')->middleware('auth', 'can:delete,comment');
 
-Route::post('images/upload', 'ImageUpload@store')->name('images.upload')->middleware('auth');
+Route::post('images/upload', 'ImageUploadController@store')->name('images.upload')->middleware('auth');

@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use Illuminate\Support\Carbon;
 use Illuminate\View\Component;
 
 class ArticleItem extends Component
@@ -11,12 +12,15 @@ class ArticleItem extends Component
     /**
      * Create a new component instance.
      *
-     * @return void
+     * @param $article
      */
     public function __construct($article)
     {
-        //
         $this->article = $article;
+    }
+
+    public function postedDate(){
+        return $this->article->created_at->toFormattedDateString();
     }
 
     /**

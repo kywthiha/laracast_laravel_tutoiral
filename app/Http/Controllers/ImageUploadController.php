@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ImageUploadRequest;
 use Illuminate\Http\Request;
 
-class ImageUpload extends Controller
+class ImageUploadController extends Controller
 {
     /**
      * Display a listing of the resource.
