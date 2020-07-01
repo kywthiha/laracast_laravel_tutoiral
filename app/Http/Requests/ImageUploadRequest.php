@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CommentUpdateRequest extends FormRequest
+class ImageUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class CommentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "text"=>"required"
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|file|max:2048'
         ];
     }
 }

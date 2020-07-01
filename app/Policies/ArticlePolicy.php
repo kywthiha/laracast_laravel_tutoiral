@@ -11,7 +11,8 @@ class ArticlePolicy
     use HandlesAuthorization;
 
     public function before(User $user){
-
+        if($user->checkAbility('manage_articles'))
+            return true;
     }
 
     /**
@@ -22,12 +23,7 @@ class ArticlePolicy
      */
     public function viewAny(User $user)
     {
-        $data = ['all_edit_articles','all_delete_articles','all_read_articles','own_edit_articles','own_delete_articles','own_read_articles','publish_articles'];
-        if($user->checkAbilities($data))
-            return true;
-        else{
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -39,13 +35,7 @@ class ArticlePolicy
      */
     public function view(User $user, Article $article)
     {
-        if($user->checkAbilities(['all_edit_articles','all_delete_articles','all_read_articles']))
-            return true;
-        elseif($user->checkAbilities(['own_edit_articles','own_delete_articles','own_read_articles']) && $article->author->is($user)){
-            return true;
-        }else{
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -72,9 +62,7 @@ class ArticlePolicy
      */
     public function update(User $user, Article $article)
     {
-        if($user->checkAbility('all_edit_articles'))
-            return true;
-        elseif($user->checkAbility('own_edit_articles') && $article->author->is($user)){
+        if($article->author->is($user)){
             return true;
         }else{
             return false;
@@ -90,9 +78,7 @@ class ArticlePolicy
      */
     public function delete(User $user, Article $article)
     {
-        if($user->checkAbility('all_delete_articles'))
-            return true;
-        elseif($user->checkAbility('own_delete_articles') && $article->author->is($user)){
+        if($article->author->is($user)){
             return true;
         }else{
             return false;

@@ -4,7 +4,7 @@
               onSubmit="return confirm('Are you sure?')" method="POST">
             @method('DELETE')
             @csrf
-            <button class="btn btn-xs btn-danger" style="font-size: x-small;">Delete</button>
+            <button class="btn btn-link" style="color:red;">Delete</button>
         </form>
     </div>
 @endcan

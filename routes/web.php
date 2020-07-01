@@ -1,6 +1,5 @@
 <?php
 
-use App\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,17 +33,20 @@ Route::prefix('/users')->middleware('auth')->group(function(){
 Route::prefix('/user')->middleware('auth')->group(function(){
     Route::get('/{user}/profile','UserController@profile')->name('user.profile')->middleware('can:changePassword,user');
     Route::get('/edit-password','UserController@editPassword')->name('user.edit_password');
-    Route::put('/change-password','UserController@changePassword')->name('user.change_password');
+    Route::put('/change-password', 'UserController@changePassword')->name('user.change_password');
+    Route::patch('/upload-profile','UserController@storeProfileImage')->name('user.upload_profile');
 });
 
-Route::resource('/roles','RoleController')->middleware('auth');
+Route::resource('/roles', 'RoleController')->middleware('auth');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/article/{article}/comments','CommentController@index')->middleware('auth','can:viewAny,App\Article');
-Route::post('/article/{article}/comments','CommentController@store')->middleware('auth','can:create,App\Article');
-Route::put('/article/{article}/comments/{comment}','CommentController@update')->middleware('auth','can:update,article');
-Route::delete('/article/{article}/comments/{comment}','CommentController@destroy')->middleware('auth','can:delete,comment');
+Route::get('/article/{article}/comments', 'CommentController@index')->middleware('auth', 'can:viewAny,App\Article');
+Route::post('/article/{article}/comments/{comment?}', 'CommentController@store')->middleware('auth', 'can:create,App\Article');
+Route::put('/article/{article}/comments/{comment}', 'CommentController@update')->middleware('auth', 'can:update,comment');
+Route::delete('/article/{article}/comments/{comment}', 'CommentController@destroy')->middleware('auth', 'can:delete,comment');
+
+Route::post('images/upload', 'ImageUploadController@store')->name('images.upload')->middleware('auth');

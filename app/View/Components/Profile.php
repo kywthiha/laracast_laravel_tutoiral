@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Component;
 
 class Profile extends Component
@@ -37,6 +38,10 @@ class Profile extends Component
     {
         $temp = $this->user->updated_at;
         return $temp?$temp->toDayDateTimeString():null;
+    }
+
+    public function profileImageUrl(){
+        return $this->user->image?Storage::url($this->user->image->url):"https://via.placeholder.com/300";
     }
 
     /**

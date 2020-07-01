@@ -17,11 +17,9 @@
 @endpush
 @push('scripts')
     <script>
-        window.onload = function () {
-                new SlimSelect({
-                    select: '#tags',
-                    placeholder: 'Select Tags'
-            })
-        }
+        new SlimSelect({
+            select: '#tags',
+            placeholder: 'Select Tags'
+        })
     </script>
 @endpush

@@ -11,7 +11,7 @@ class CommentRepository
 {
     public function findByArticle(Article $article): Collection
     {
-        $comments = $article->comments()->whereNull('comment_id')->with('comments','user','comments.user')->latest();
+        $comments = $article->comments()->with('comments','user')->latest();
         return $comments->get();
     }
 

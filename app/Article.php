@@ -11,27 +11,37 @@ class Article extends Model
     protected $fillable = ['title','body','except','user_id'];
 
 
-    public function author(){
-        return $this->belongsTo(User::class,'user_id');
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function tags(){
+    public function tags()
+    {
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function tagsname(){
+    public function tagsname()
+    {
         return $this->tags->pluck('name')->unique();
+    }
+
+    public function image()
+    {
+        return $this->morphOne('App\Image', 'imageable');
     }
 
     public function toSearchableArray()
     {
         $array = $this->toArray();
-        return array('title' => $array['title'],'body' => $array['body']);
+        return array('title' => $array['title'], 'body' => $array['body']);
     }
+
 
 
 
